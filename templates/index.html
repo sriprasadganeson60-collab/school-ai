@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>School Management LAN Dashboard</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  </head>
+  <body class="bg-light">
+    <div class="container py-4">
+      <h1 class="mb-1">School Management Web System</h1>
+      <p class="text-muted">
+        LAN-ready dashboard (open this page from your local IP on phone/PC).
+      </p>
+
+      <div class="row g-3 mb-4">
+        <div class="col-md-3">
+          <label class="form-label">Category</label>
+          <select id="categoryFilter" class="form-select">
+            <option value="all">All</option>
+            <option value="attendance">Attendance</option>
+            <option value="performance">Performance</option>
+            <option value="discipline">Discipline</option>
+            <option value="event">Event</option>
+          </select>
+        </div>
+        <div class="col-md-5">
+          <label class="form-label">Search (student/event)</label>
+          <input id="searchInput" class="form-control" placeholder="Type name or event" />
+        </div>
+        <div class="col-md-2 d-flex align-items-end">
+          <button id="refreshBtn" class="btn btn-primary w-100">Refresh</button>
+        </div>
+        <div class="col-md-2 d-flex align-items-end">
+          <button id="notifyBtn" class="btn btn-outline-secondary w-100">Enable Notifications</button>
+        </div>
+      </div>
+
+      <div class="card mb-4">
+        <div class="card-header">Latest Record</div>
+        <div class="card-body" id="latestRecord">No data yet.</div>
+      </div>
+
+      <div class="card mb-4">
+        <div class="card-header">All Records</div>
+        <ul class="list-group list-group-flush" id="recordList"></ul>
+      </div>
+
+      <div class="row g-3 mb-4">
+        <div class="col-md-6">
+          <div class="card">
+            <div class="card-header">Attendance Count per Student</div>
+            <div class="card-body"><canvas id="attendanceChart"></canvas></div>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="card">
+            <div class="card-header">Average Performance per Student</div>
+            <div class="card-body"><canvas id="performanceChart"></canvas></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card mb-4">
+        <div class="card-header">AI Assistant</div>
+        <div class="card-body">
+          <textarea id="questionInput" class="form-control mb-2" rows="2" placeholder="Try: Mark attendance for Aisha"></textarea>
+          <div class="d-flex gap-2 mb-2">
+            <button id="askBtn" class="btn btn-success">Ask AI</button>
+            <select id="voiceSelect" class="form-select" style="max-width:200px;"></select>
+            <input id="pitchInput" type="number" class="form-control" style="max-width:120px;" min="0" max="2" step="0.1" value="1" title="Pitch" />
+            <input id="rateInput" type="number" class="form-control" style="max-width:120px;" min="0.5" max="2" step="0.1" value="1" title="Rate" />
+          </div>
+          <pre id="aiResponse" class="bg-dark text-light p-3 rounded small mb-0">Awaiting prompt...</pre>
+        </div>
+      </div>
+
+      <div class="card mb-2">
+        <div class="card-header">Manual Add (simulate ESP32 POST)</div>
+        <div class="card-body">
+          <div class="row g-2">
+            <div class="col-md-2"><select id="manualCategory" class="form-select"><option>attendance</option><option>performance</option><option>discipline</option><option>event</option></select></div>
+            <div class="col-md-8"><textarea id="manualJson" class="form-control" rows="3">{"name":"Aisha","date":"2026-02-19","teacher":"Mr. Khan"}</textarea></div>
+            <div class="col-md-2 d-grid"><button id="manualAddBtn" class="btn btn-warning">POST /add</button></div>
+          </div>
+          <small class="text-muted d-block mt-2">Send JSON payloads like an ESP32 WiFi client would.</small>
+        </div>
+      </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='app.js') }}"></script>
+  </body>
+</html>
